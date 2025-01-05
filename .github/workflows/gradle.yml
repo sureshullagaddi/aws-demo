@@ -74,8 +74,11 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       # 5. Build Docker Image
+      #- name: Build Docker Image
+      #  run: docker build -t 7829099824/aws-repo:latest .
+      # Update Build Step with Build Argument
       - name: Build Docker Image
-        run: docker build -t 7829099824/aws-repo:latest .
+        run: docker build --build-arg JAR_FILE=aws-demo-0.0.1-SNAPSHOT.jar -t 7829099824/aws-repo:latest .
 
       # 6. Push Docker Image to DockerHub
       - name: Push Docker Image to DockerHub
