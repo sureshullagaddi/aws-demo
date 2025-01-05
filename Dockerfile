@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim AS builder
 WORKDIR /app
 
 # Copy the jar file into the container
-COPY build/libs/*.jar  /app/aws-demo.jar
+COPY build/libs/aws-demo-0.0.1-SNAPSHOT.jar  /app/aws-demo.jar
 
 # Expose the port your Spring Boot app will run on
 EXPOSE 8080
