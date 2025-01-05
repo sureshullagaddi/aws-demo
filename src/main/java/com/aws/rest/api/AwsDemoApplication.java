@@ -8,7 +8,7 @@ public class AwsDemoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AwsDemoApplication.class, args);
-		System.out.println("Application is up!!");
+		System.out.println("Application is up!!!");
 	}
 
 }
