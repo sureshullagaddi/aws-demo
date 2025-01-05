@@ -5,8 +5,8 @@ build/
 !**/src/main/**
 !**/src/test/**
 gradle.properties
-application-local.yml
-application.yml
+#application-local.yml
+#application.yml
 
 ### STS ###
 .apt_generated
