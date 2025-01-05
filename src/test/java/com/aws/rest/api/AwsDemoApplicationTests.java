@@ -8,6 +8,7 @@ class AwsDemoApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println("Test ran!!!!!!");
 	}
 
 }
