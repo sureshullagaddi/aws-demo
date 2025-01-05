@@ -37,6 +37,9 @@ jobs:
       - name: Build JAR with Gradle
         run: ./gradlew clean build
 
+      - name: List Build Directory
+        run: ls -R build
+
       # 4. Archive Build Artifact
       - name: Archive JAR
         uses: actions/upload-artifact@v4
