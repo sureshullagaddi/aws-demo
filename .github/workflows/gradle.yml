@@ -38,7 +38,7 @@ jobs:
         run: ./gradlew clean build
 
       - name: List Build Directory
-        run: ls -R build
+        run: ls -R build/libs
 
       # 4. Archive Build Artifact
       - name: Archive JAR
