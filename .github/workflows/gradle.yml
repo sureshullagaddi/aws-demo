@@ -40,6 +40,9 @@ jobs:
       - name: List Build Directory
         run: ls -R build/libs
 
+      - name: list app Directory
+        run: ls -R /app
+
       # 4. Archive Build Artifact
       - name: Archive JAR
         uses: actions/upload-artifact@v4
