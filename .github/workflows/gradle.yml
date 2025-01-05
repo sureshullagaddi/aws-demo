@@ -97,7 +97,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      # 2. Create Kubernetes Cluster
+      # 2. Install eksctl
+      - name: Install eksctl
+        run: |
+          curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+          sudo mv /tmp/eksctl /usr/local/bin
+          eksctl version
+
+      # 3. Create Kubernetes Cluster
       - name: Create EKS Cluster
         run: |
           eksctl create cluster \
@@ -105,13 +112,13 @@ jobs:
             --region us-east-1 \
             --nodes 2
 
-      # 3. Set up kubectl for Kubernetes
+      # 4. Set up kubectl for Kubernetes
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
         with:
           version: latest
 
-      # 4. Deploy to Kubernetes
+      # 5. Deploy to Kubernetes
       - name: Deploy to Kubernetes
         run: |
           echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig
