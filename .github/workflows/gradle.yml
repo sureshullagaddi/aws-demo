@@ -117,7 +117,7 @@ jobs:
         uses: azure/setup-kubectl@v3
         with:
           version: latest
-
+      # verify kubernetes manifests
       - name: Verify Kubernetes Manifests
         run: ls -R k8s/
 
