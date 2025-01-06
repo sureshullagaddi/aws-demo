@@ -118,6 +118,9 @@ jobs:
         with:
           version: latest
 
+      - name: Verify Kubernetes Manifests
+        run: ls -R k8s/
+
       # 5. Deploy to Kubernetes
       - name: Deploy to Kubernetes
         run: |
