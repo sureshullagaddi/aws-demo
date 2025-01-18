@@ -20,14 +20,20 @@ spring:
     port: 8081
 
   datasource:
-    url: jdbc:mariadb://localhost:3306/demo
+    url: jdbc:mariadb://localhost:3306/PI4_IT4_COUNTERPARTY_DB
     username: root
-    password: root
+    password: Winter@@2024
+    hikari:
+      initialization-fail-timeout: 0
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto:
       show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDB103Dialect
+
 server:
   servlet:
     context-path: /aws-demo

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.aws.rest.api'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0-SNAPSHOT'
 
 java {
 	toolchain {
@@ -21,6 +21,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+
+	// database dependencies
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
+
+	// dev tools only for dev
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// Use Hibernate 5.x for javax.persistence compatibility
+	//implementation 'org.hibernate:hibernate-core:5.6.15.Final'
 
 	// Lombok dependency
 	compileOnly 'org.projectlombok:lombok:1.18.24'   // Use the latest version available
