@@ -26,3 +26,4 @@ ENTRYPOINT ["java", "-jar", "aws-demo.jar"]
 #4.docker push 7829099824/aws-repo:latest
 
 #find the way to push code to github - build image  - push to aws ec2 - push 1 copy to dockerhub - automate - deploy using kubernates
+#check
