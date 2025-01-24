@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     // Use dynamic Docker repository and tag
-                    sh "docker build -t ${params.DOCKER_REPO}:${params.DOCKER_TAG} ."
+                    sh 'docker build -t ${params.DOCKER_REPO}:${params.DOCKER_TAG} .'
                 }
             }
         }
@@ -31,7 +31,7 @@ pipeline {
                         sh 'echo ${DOCKER_PASSWORD} | docker login -u 7829099824 --password-stdin'
                     }
                     // Push the image dynamically
-                    sh "docker push ${params.DOCKER_REPO}:${params.DOCKER_TAG}"
+                    sh 'docker push ${params.DOCKER_REPO}:${params.DOCKER_TAG}'
                 }
             }
         }
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     // Pull the image dynamically
-                    sh "docker pull ${params.DOCKER_REPO}:${params.DOCKER_TAG}"
+                    sh 'docker pull ${params.DOCKER_REPO}:${params.DOCKER_TAG}'
 
                     // Example: Deploy to Kubernetes using kubectl (update deployment configuration)
                     sh 'kubectl set image deployment/aws-demo aws-demo=${params.DOCKER_REPO}:${params.DOCKER_TAG}
