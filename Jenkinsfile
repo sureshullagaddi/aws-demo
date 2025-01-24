@@ -5,18 +5,14 @@ pipeline {
         string(name: 'DOCKER_TAG', defaultValue: 'latest', description: 'Tag for the Docker image')
     }
     stages {
-        stage('Git checkout') {
+        stage('Checkout & gradle build') {
             steps {
-                step('checkout'){
-                    checkout scmGit(
-                        branches: [[name: '*/main']],
-                        extensions: [],
-                        userRemoteConfigs: [[credentialsId: 'gitCredentials', url: 'https://github.com/sureshullagaddi/aws-demo.git']]
+                checkout scmGit(
+                    branches: [[name: '*/main']],
+                    extensions: [],
+                    userRemoteConfigs: [[credentialsId: 'gitCredentials', url: 'https://github.com/sureshullagaddi/aws-demo.git']]
                     )
-                }
-                step('gradle build'){
-                    sh './gradlew clean build'
-                }
+                 sh './gradlew clean build'
             }
         }
         stage('Build docker image') {
