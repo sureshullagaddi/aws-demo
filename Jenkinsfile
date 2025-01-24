@@ -28,9 +28,7 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'Dockerhub-pass', variable: 'DOCKER_PASSWORD')]) {
                         // Securely login using password via stdin
-                        sh '''
-                            echo ${DOCKER_PASSWORD} | docker login -u 7829099824 --password-stdin
-                        '''
+                        sh 'echo ${DOCKER_PASSWORD} | docker login -u 7829099824 --password-stdin'
                     }
                     // Push the image dynamically
                     sh "docker push ${params.DOCKER_REPO}:${params.DOCKER_TAG}"
@@ -44,10 +42,8 @@ pipeline {
                     sh "docker pull ${params.DOCKER_REPO}:${params.DOCKER_TAG}"
 
                     // Example: Deploy to Kubernetes using kubectl (update deployment configuration)
-                    sh '''
-                        kubectl set image deployment/aws-demo aws-demo=${params.DOCKER_REPO}:${params.DOCKER_TAG}
-                        kubectl rollout status deployment/aws-demo
-                    '''
+                    sh 'kubectl set image deployment/aws-demo aws-demo=${params.DOCKER_REPO}:${params.DOCKER_TAG}
+                        kubectl rollout status deployment/aws-demo'
                 }
             }
         }
