@@ -35,17 +35,5 @@ pipeline {
                 }
             }
         }
-        stage('Pull image from Docker Hub and deploy to Kubernetes') {
-            steps {
-                script {
-                    // Pull the image dynamically
-                    sh 'docker pull ${params.DOCKER_REPO}:${params.DOCKER_TAG}'
-
-                    // Example: Deploy to Kubernetes using kubectl (update deployment configuration)
-                    sh 'kubectl set image deployment/aws-demo aws-demo=${params.DOCKER_REPO}:${params.DOCKER_TAG}
-                        kubectl rollout status deployment/aws-demo'
-                }
-            }
-        }
     }
 }
