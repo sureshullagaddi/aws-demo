@@ -31,8 +31,5 @@ pipeline {
                 }
             }
         }
-        stage('Pull image from docker hub and deploy to kubernates'){
-
-        }
     }
 }
