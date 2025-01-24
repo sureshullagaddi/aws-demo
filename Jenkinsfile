@@ -7,14 +7,14 @@ pipeline {
     stages {
         stage('Git checkout') {
             steps {
-                step('1.checkout'){
+                step('checkout'){
                     checkout scmGit(
                         branches: [[name: '*/main']],
                         extensions: [],
                         userRemoteConfigs: [[credentialsId: 'gitCredentials', url: 'https://github.com/sureshullagaddi/aws-demo.git']]
                     )
                 }
-                step('2.gradle build'){
+                step('gradle build'){
                     sh './gradlew clean build'
                 }
             }
