@@ -18,6 +18,7 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script {
+                sh 'echo --- ${params.DOCKER_REPO} '
                     // Use dynamic Docker repository and tag
                     sh 'docker build -t ${params.DOCKER_REPO}:${params.DOCKER_TAG} .'
                 }
