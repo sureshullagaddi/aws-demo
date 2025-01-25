@@ -18,9 +18,8 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script {
-                sh 'echo --- ${params.DOCKER_REPO} '
                     // Use dynamic Docker repository and tag
-                    sh 'docker build -t ${params.DOCKER_REPO}:${params.DOCKER_TAG} .'
+                    sh "docker build -t ${params.DOCKER_REPO}:${params.DOCKER_TAG} ."
                 }
             }
         }
@@ -29,10 +28,10 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'Dockerhub-pass', variable: 'DOCKER_PASSWORD')]) {
                         // Securely login using password via stdin
-                        sh 'echo ${DOCKER_PASSWORD} | docker login -u 7829099824 --password-stdin'
+                        sh '''echo ${DOCKER_PASSWORD} | docker login -u 7829099824 --password-stdin'''
                     }
                     // Push the image dynamically
-                    sh 'docker push ${params.DOCKER_REPO}:${params.DOCKER_TAG}'
+                    sh "docker push ${params.DOCKER_REPO}:${params.DOCKER_TAG}"
                 }
             }
         }
