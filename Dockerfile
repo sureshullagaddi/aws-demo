@@ -8,6 +8,7 @@ WORKDIR /app
 #COPY build/libs/aws-demo-0.0.1-SNAPSHOT.jar  /app/aws-demo.jar
 #COPY aws-demo-0.0.1-SNAPSHOT.jar /app/aws-demo.jar
 COPY build/libs/aws-demo-1.0.0-SNAPSHOT.jar  /app/aws-demo.jar
+#COPY build/libs/*.jar ./app.jar
 # Expose the port your Spring Boot app will run on
 EXPOSE 8080
 

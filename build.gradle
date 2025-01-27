@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id 'maven-publish'
 	id 'org.springframework.boot' version '3.1.0'
 	id 'io.spring.dependency-management' version '1.1.0'
 }
@@ -41,3 +42,66 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+/*publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java // Publish the Java JAR
+		}
+	}
+	repositories {
+		maven {
+			// Use Nexus repository for publishing
+			name = "Nexus"
+			url = uri("http://<NEXUS_SERVER_IP>:8081/repository/<REPOSITORY_NAME>/") // Replace with your Nexus URL
+			credentials {
+				username = project.findProperty("nexusUsername") ?: "your-username" // Replace or use Gradle properties
+				password = project.findProperty("nexusPassword") ?: "your-password" // Replace or use Gradle properties
+			}
+		}
+	}
+}
+
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			groupId = group
+			artifactId = rootProject.name
+			version = version
+			from components.java
+
+			versionMapping {
+				usage('java-api') {
+					fromResolutionOf('runtimeClasspath')
+				}
+				usage('java-runtime') {
+					fromResolutionResult()
+				}
+			}
+
+			pom {
+				name = rootProject.name
+				description = 'This is the domain service in counter party responsible for master data management and related domain operations.'
+				licenses {
+					license {
+						name = "IKANO BANK License, Version ${version}"
+						url = 'https://ikanobank.se/'
+					}
+				}
+			}
+		}
+	}
+	repositories {
+		maven {
+			def releasesRepoUrl = "https://artifacts.le.tnt.bank.ikano/repository/maven-releases/"
+			def snapshotsRepoUrl = "https://artifacts.le.tnt.bank.ikano/repository/maven-snapshots/"
+			credentials {
+				username nexusUsername
+				password nexusPassword
+			}
+			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+		}
+	}
+}
+*/
