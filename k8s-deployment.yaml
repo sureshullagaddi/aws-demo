@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: aws-demo
-          image: aws-demo-example:1.0
+          image: 7829099824/aws-demo:latest
           # Image that will be used to containers in the cluster
           imagePullPolicy: IfNotPresent
           ports:
