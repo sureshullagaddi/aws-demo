@@ -1,6 +1,6 @@
 package com.aws.rest.api.service;
 
-import com.aws.rest.api.entity.UserEntity;
+import com.aws.rest.api.entity.User;
 import com.aws.rest.api.interfaces.UserInterface;
 import com.aws.rest.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,17 +16,17 @@ public class DbUserService implements UserInterface {
     private final UserRepository userRepository;
 
     @Override
-    public Optional<UserEntity> getSingleUser(Long uid) throws Exception {
+    public Optional<User> getSingleUser(Long uid) throws Exception {
         return userRepository.findById(uid);
     }
 
     @Override
-    public Optional<List<UserEntity>> getAllUsers() throws Exception {
+    public Optional<List<User>> getAllUsers() throws Exception {
         return Optional.of(userRepository.findAll());
     }
 
     @Override
-    public Optional<UserEntity> saveUser(UserEntity userEntity) throws Exception {
+    public Optional<User> saveUser(User userEntity) throws Exception {
         return Optional.of(userRepository.save(userEntity));
     }
 

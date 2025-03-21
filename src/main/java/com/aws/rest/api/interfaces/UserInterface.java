@@ -1,18 +1,18 @@
 package com.aws.rest.api.interfaces;
 
 
-import com.aws.rest.api.entity.UserEntity;
+import com.aws.rest.api.entity.User;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserInterface {
 
-    Optional<UserEntity> getSingleUser(Long uid) throws Exception;
+    Optional<User> getSingleUser(Long uid) throws Exception;
 
-    Optional<List<UserEntity>> getAllUsers() throws Exception;
+    Optional<List<User>> getAllUsers() throws Exception;
 
-    Optional<UserEntity> saveUser(UserEntity userEntity) throws Exception;
+    Optional<User> saveUser(User userEntity) throws Exception;
 
     void deleteUser(Long uid) throws Exception;
 }

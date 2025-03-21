@@ -9,13 +9,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users") // Database table name
+@Table(name = "USERS") // Database table name
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
-public class UserEntity {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment for primary key
@@ -32,12 +32,15 @@ public class UserEntity {
     private String titleId;
 
     @Column(name = "FIRST_NAME", nullable = false) // Mandatory first name
-    private String firstName;
+    private String username;
 
     @Column(name = "MIDDLE_NAME") // Optional middle name
-    private String middleName;
+    private String role;
 
     @Column(name = "LAST_NAME", nullable = false) // Mandatory last name
     private String lastName;
+
+    @Column(name = "PASSWORD", nullable = false) // Mandatory last name
+    private String password;
 }
 
