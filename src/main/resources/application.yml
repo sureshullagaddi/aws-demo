@@ -28,9 +28,9 @@ spring:
   application:
     name: aws-demo
   datasource:
-    url: jdbc:mariadb://localhost:3306/PI4_IT4_COUNTERPARTY_DB?useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: Winter@@2024
+    url: jdbc:mariadb://localhost:3306/db_name?useSSL=false&allowPublicKeyRetrieval=true
+    username: xxxx
+    password: xxxx
     hikari:
       initialization-fail-timeout: 0
 
@@ -41,7 +41,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect
-        default_schema: PI4_IT4_COUNTERPARTY_DB
+        default_schema: db_name
         physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         format_sql: true
 
