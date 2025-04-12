@@ -12,7 +12,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/aws-demo/api/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;

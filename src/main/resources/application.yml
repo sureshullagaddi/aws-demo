@@ -18,6 +18,10 @@
 #        default_schema: ${dbname}
 #        physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+server:
+  servlet:
+    context-path: /aws-demo
+
 spring:
   server:
     port: 8080
