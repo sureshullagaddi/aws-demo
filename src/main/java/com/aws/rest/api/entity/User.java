@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment for primary key
-    @Column(name = "USER_ID") // Map to column in the database
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID")
     private Long userId;
 
     @Column(name = "UID", nullable = false, unique = true) // Unique UID field

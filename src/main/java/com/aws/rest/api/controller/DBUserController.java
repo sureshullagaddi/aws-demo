@@ -1,6 +1,8 @@
 package com.aws.rest.api.controller;
 
 import com.aws.rest.api.entity.User;
+import com.aws.rest.api.exceptions.UnAutherizedException;
+import com.aws.rest.api.jwt.JwtUtil;
 import com.aws.rest.api.model.UserRequest;
 import com.aws.rest.api.service.DbUserService;
 import jakarta.validation.Valid;
@@ -9,9 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
+
 
 @Slf4j
 @RestController
@@ -21,16 +23,33 @@ public class DBUserController {
 
     private final DbUserService dbUserService;
 
+    private final JwtUtil jwtUtil;
+
     @GetMapping
-    public Optional<List<User>> getAllUsers() throws Exception {
+    public ResponseEntity<Optional<List<User>>> getAllUsers(@RequestHeader("Authorization") String authHeader) throws Exception {
         log.info("Getting all db users >>>: ");
-        return dbUserService.getAllUsers();
+
+        // Check if the Authorization header is missing or doesn't contain Bearer token
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid token");
+            throw new UnAutherizedException("UNAUTHORIZED",new Exception("Authorization error"));
+        }
+        // Extract token from header
+        String token = authHeader.substring(7);
+        String username = jwtUtil.extractUsername(token);
+
+        // Validate token
+        if (!jwtUtil.validateToken(token,username)) {
+            //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+            throw new UnAutherizedException("Invalid token",new Exception("UNAUTHORIZED"));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(dbUserService.getAllUsers());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) throws Exception {
         log.info("Getting user by id >>>:");
-        return dbUserService.getSingleUser(id)
+        return dbUserService.getUser(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -57,7 +76,7 @@ public class DBUserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) throws Exception {
         log.info("Deleting user by id >>>: ");
-        if (dbUserService.getSingleUser(id).isPresent()) {
+        if (dbUserService.getUser(id).isPresent()) {
             dbUserService.deleteUser(id);
             return ResponseEntity.noContent().build();
         }

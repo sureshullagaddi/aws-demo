@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface UserInterface {
 
-    Optional<User> getSingleUser(Long uid) throws Exception;
+    Optional<User> getUser(Long uid) throws Exception;
 
     Optional<List<User>> getAllUsers() throws Exception;
 
