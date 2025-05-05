@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class DbUserService implements UserInterface {
+public class DBUserService implements UserInterface {
 
     private final UserRepository userRepository;
 
@@ -32,6 +32,19 @@ public class DbUserService implements UserInterface {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Optional<User> saveUser(User userEntity) throws Exception {
         return Optional.of(userRepository.save(userEntity));
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Optional<User> updateUser(Long uid, User userEntity) throws Exception {
+        return userRepository.findById(uid).map(existingUser -> {
+                existingUser.setUserId(userEntity.getUserId());
+                existingUser.setUsername(userEntity.getUsername());
+                existingUser.setLastName(userEntity.getLastName());
+                existingUser.setCntpyNum(userEntity.getCntpyNum());
+                // Update other fields as necessary
+                return userRepository.save(existingUser);
+        });
     }
 
     @Override

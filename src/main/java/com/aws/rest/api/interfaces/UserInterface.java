@@ -14,5 +14,7 @@ public interface UserInterface {
 
     Optional<User> saveUser(User userEntity) throws Exception;
 
+    Optional<User> updateUser(Long uid, User userEntity) throws Exception;
+
     void deleteUser(Long uid) throws Exception;
 }

@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // No sessions
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**","/auth/login").permitAll() // Allow login & register
+                        .requestMatchers("/users","/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**","/auth/login").permitAll() // Allow login & register
                         .anyRequest().authenticated() // Protect other endpoints
                 ).exceptionHandling(exception -> exception
                         .authenticationEntryPoint(new Http403ForbiddenEntryPoint()) // Prevent redirect, return 403 JSON

@@ -1,67 +1,91 @@
 package com.aws.rest.api.controller;
 
 import com.aws.rest.api.entity.User;
-import com.aws.rest.api.exceptions.UnAutherizedException;
 import com.aws.rest.api.jwt.JwtUtil;
 import com.aws.rest.api.model.UserRequest;
-import com.aws.rest.api.service.DbUserService;
+import com.aws.rest.api.service.DBUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Optional;
 
 
 @Slf4j
 @RestController
-@RequestMapping("/api/db-users")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class DBUserController {
 
-    private final DbUserService dbUserService;
+    private final DBUserService userService;
 
     private final JwtUtil jwtUtil;
 
     @GetMapping
     public ResponseEntity<Optional<List<User>>> getAllUsers(@RequestHeader("Authorization") String authHeader) throws Exception {
-        log.info("Getting all db users >>>: ");
-
+        log.info("Getting all users >>>: ");
         // Check if the Authorization header is missing or doesn't contain Bearer token
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid token");
-            throw new UnAutherizedException("UNAUTHORIZED",new Exception("Authorization error"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        // Extract token from header
+        // Extract token
         String token = authHeader.substring(7);
-        String username = jwtUtil.extractUsername(token);
-
         // Validate token
-        if (!jwtUtil.validateToken(token,username)) {
-            //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
-            throw new UnAutherizedException("Invalid token",new Exception("UNAUTHORIZED"));
+        if (!jwtUtil.validateToken(token, jwtUtil.extractUsername(token))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(dbUserService.getAllUsers());
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<User> getUserById(@RequestHeader("Authorization") String authHeader,
+                                            @PathVariable Long id) throws Exception {
         log.info("Getting user by id >>>:");
-        return dbUserService.getUser(id)
+        if(id == null || id > 0){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        // Check if the Authorization header is missing or doesn't contain Bearer token
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        // Extract token
+        String token = authHeader.substring(7);
+        // Validate token
+        if (!jwtUtil.validateToken(token, jwtUtil.extractUsername(token))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        return userService.getUser(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Optional<User>> createUser(@RequestBody @Valid UserRequest userRequest) {
+    public ResponseEntity<Optional<User>> createUser(@RequestHeader("Authorization") String authHeader,
+                                                     @RequestBody @Valid UserRequest userRequest) {
         log.info("Creating user >>>: ");
         try {
+            if(userRequest == null || userRequest.toString().isEmpty()){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+            // Check if the Authorization header is missing or doesn't contain Bearer token
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            }
+            // Extract token
+            String token = authHeader.substring(7);
+            // Validate token
+            if (!jwtUtil.validateToken(token, jwtUtil.extractUsername(token))) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            }
+
             // Validate and convert the request
-            User userEnt = convertToUserEntity(userRequest);
+            User userEntity = convertToUserEntity(userRequest);
             // Save to the database
-            Optional<User> savedUser = dbUserService.saveUser(userEnt);
+            Optional<User> savedUser = userService.saveUser(userEntity);
             // Return ResponseEntity with proper status code
             return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
         } catch (IllegalArgumentException ex) {
@@ -73,11 +97,54 @@ public class DBUserController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Optional<User>> updateUser(@RequestHeader("Authorization") String authHeader,
+                                                     @PathVariable Long id,
+                                                     @RequestBody @Valid UserRequest userRequest) throws Exception {
+        log.info("Updating user");
+
+        if(userRequest == null || userRequest.toString().isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        // Check if the Authorization header is missing or doesn't contain Bearer token
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        // Extract token
+        String token = authHeader.substring(7);
+        // Validate token
+        if (!jwtUtil.validateToken(token, jwtUtil.extractUsername(token))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        // Validate and convert the request
+        User userEntity = updateUserEntity(userRequest);
+        Optional<User> user = userService.updateUser(id,userEntity);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Void> deleteUser(@RequestHeader("Authorization") String authHeader,
+                                           @PathVariable Long id) throws Exception {
         log.info("Deleting user by id >>>: ");
-        if (dbUserService.getUser(id).isPresent()) {
-            dbUserService.deleteUser(id);
+
+        if(id == null || id > 0){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        // Check if the Authorization header is missing or doesn't contain Bearer token
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        // Extract token
+        String token = authHeader.substring(7);
+        // Validate token
+        if (!jwtUtil.validateToken(token, jwtUtil.extractUsername(token))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        if (userService.getUser(id).isPresent()) {
+            userService.deleteUser(id);
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
@@ -91,5 +158,14 @@ public class DBUserController {
                 .username(userRequest.getFirst_name())
                 .lastName(userRequest.getLast_name())
                 .build();
+    }
+
+    private User updateUserEntity(UserRequest userRequest){
+        log.info("converting user to update");
+        return User.builder()
+                .userId(Long.valueOf(userRequest.getUid()))
+                .username(userRequest.getFirst_name())
+                .lastName(userRequest.getLast_name())
+                .cntpyNum(userRequest.getCntpy_num()).build();
     }
 }
